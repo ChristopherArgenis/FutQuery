@@ -1,7 +1,7 @@
 import streamlit as st
 
 # Título y descripción
-st.set_page_config(page_title="FutQuery", layout="wide")
+st.set_page_config(page_title="FutQuery")
 st.title("⚽ FutQuery")
 st.markdown("""
 Consulta y explora datos de fútbol con SQL.  
