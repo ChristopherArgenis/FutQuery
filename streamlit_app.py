@@ -135,11 +135,11 @@ with tab1:
         {
             "titulo": "Jugadores con más control de balón",
             "sql": """
-                SELECT Jugador.alias, Habilidades.'Control de Balon'
+                SELECT Jugador.alias, Habilidades.control_balon
                 FROM Jugador
                 JOIN J_Indicador ON Jugador.id = J_Indicador.id
                 JOIN Habilidades ON J_Indicador.id_habilidades = Habilidades.id
-                ORDER BY Habilidades.'Control de Balon' DESC
+                ORDER BY Habilidades.control_balon  DESC
                 LIMIT 10;
             """,
             "descripcion": "Jugadores con mejor control de balón."
