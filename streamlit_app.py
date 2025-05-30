@@ -224,4 +224,4 @@ with tab3:
     """)
 
     st.markdown("### 🗂️ Diagrama Relacional")
-    st.image("tables_BD.png", caption="Diagrama Relacional de la Base de Datos Normalizada (FIFA 2015)", use_column_width=True)
+    st.image("tables_BD.png", caption="Diagrama Relacional de la Base de Datos Normalizada (FIFA 2015)")
