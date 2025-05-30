@@ -45,19 +45,20 @@ with tab1:
 # TAB 2: Ejecutor SQL
 with tab2:
     st.subheader("✍️ Escribe tu propia consulta SQL")
+    col1, col2 = st.columns([2, 1])
 
-    # Mostrar nombres de tablas y registros
-    st.markdown("### Tablas disponibles")
-    tablas = cursor.execute("SELECT name FROM sqlite_master WHERE type='table'").fetchall()
-    for (tabla,) in tablas:
-        total = cursor.execute(f"SELECT COUNT(*) FROM {tabla}").fetchone()[0]
-        st.markdown(f"- `{tabla}` ({total} registros)")
+    with col1:
+        consulta_usuario = st.text_area("Escribe tu consulta SQL aquí:", height=200)
+        if st.button("Ejecutar consulta"):
+            try:
+                resultado = pd.read_sql_query(consulta_usuario, conn)
+                st.dataframe(resultado)
+            except Exception as e:
+                st.error(f"❌ Error al ejecutar la consulta: {e}")
 
-    consulta_usuario = st.text_area("Escribe tu consulta SQL aquí:", height=150)
-
-    if st.button("Ejecutar consulta"):
-        try:
-            resultado = pd.read_sql_query(consulta_usuario, conn)
-            st.dataframe(resultado)
-        except Exception as e:
-            st.error(f"❌ Error al ejecutar la consulta: {e}")
+    with col2:
+        st.markdown("### 📋 Tablas disponibles")
+        tablas = cursor.execute("SELECT name FROM sqlite_master WHERE type='table'").fetchall()
+        for (tabla,) in tablas:
+            total = cursor.execute(f"SELECT COUNT(*) FROM {tabla}").fetchone()[0]
+            st.markdown(f"- `{tabla}` ({total} registros)")
