@@ -18,7 +18,7 @@ st.markdown("""
 """)
 
 # Tabs principales
-tab1, tab2 = st.tabs(["🧠 Ejemplos", "🛠️ Ejecutor SQL"])
+tab1, tab2, tab3 = st.tabs(["🧠 Ejemplos", "🛠️ Ejecutor SQL", "🗂️ Acerca de..."])
 
 # TAB 1: Ejemplos
 with tab1:
@@ -176,3 +176,52 @@ with tab2:
         for (tabla,) in tablas:
             total = cursor.execute(f"SELECT COUNT(*) FROM {tabla}").fetchone()[0]
             st.markdown(f"- `{tabla}` ({total} registros)")
+
+with tab3:
+    st.markdown("### 🎓 Acerca de FutQuery")
+
+    st.markdown("""
+    #### 1. Objetivo del Proyecto
+    Este proyecto tiene como objetivo principal servir como herramienta educativa para practicar y visualizar consultas SQL aplicadas a un conjunto de datos real. Utiliza información sobre jugadores de FIFA 2015 para explorar características individuales y relaciones como nacionalidad, club, posición y más.
+
+    #### 2. Contexto y Aplicabilidad
+    - **Propósito**: Analizar diversas características y relaciones de jugadores de FIFA 2015 usando SQL.
+    - **Aplicación**: Útil para estudiantes, analistas de datos y fanáticos del fútbol interesados en aprender SQL de manera práctica e intuitiva.
+
+    #### 3. Origen del Dataset
+    - **Fuente**: Kaggle.
+    - **Año de Referencia**: 2015.
+
+    #### 4. Normalización y Diagrama Relacional
+    - Se llevó a cabo un proceso de **normalización** del dataset original en múltiples tablas, buscando claridad semántica y eficiencia en las relaciones.
+    - **Dificultades**: La principal complejidad fue estructurar correctamente las relaciones entre entidades como jugador, club, país, métricas, etc.
+
+    #### 5. Generación del Nuevo Dataset
+    El desarrollador realizó:
+    - La normalización del dataset.
+    - La creación de una base de datos con SQLAlchemy.
+    - Un script de procesamiento para poblar las tablas.
+    - La construcción de una aplicación interactiva para ejecutar queries que permiten generar nuevos datasets o vistas a partir de las relaciones.
+
+    #### 6. Entregables del Proyecto
+    - Dataset base con la información original.
+    - Diagrama relacional normalizado.
+    - Aplicación interactiva con dos vistas:
+      - Ejemplos de consultas SQL.
+      - Ejecutador personalizado de queries SQL.
+
+    #### 7. Información del Estudiante
+    - **Nombre**: Christopher Argenis Preciado Silva  
+    - **Edad**: 20 años  
+    - **Matrícula**: 376907
+
+    #### 8. Conclusión del Proyecto
+    Durante el desarrollo de este proyecto, se consolidaron múltiples aprendizajes adquiridos en clase, incluyendo la normalización de datos, la creación de relaciones entre tablas y la escritura de consultas SQL complejas. A nivel técnico, uno de los principales desafíos fue decidir cómo poblar correctamente las tablas normalizadas y cómo estructurar las relaciones entre ellas para que reflejaran adecuadamente la lógica del dominio.
+
+    Uno de los mayores logros fue convertir este análisis en una aplicación web interactiva con Streamlit, que no solo sirve como repositorio de ejemplos sino también como un entorno para ejecutar consultas SQL personalizadas. El ejecutor SQL representa un valor añadido, permitiendo al usuario practicar libremente en una base de datos bien estructurada.
+
+    Esta herramienta tiene un gran potencial práctico, especialmente como apoyo educativo para estudiantes y fanáticos del fútbol que deseen practicar SQL sobre un contexto familiar y atractivo. Finalmente, una mejora futura destacable sería incorporar un asistente con inteligencia artificial que interprete lenguaje natural y lo convierta automáticamente en sentencias SQL, haciendo la experiencia aún más accesible e innovadora.
+    """)
+
+    st.markdown("### 🗂️ Diagrama Relacional")
+    st.image("tables_BD.png", caption="Diagrama Relacional de la Base de Datos Normalizada (FIFA 2015)", use_column_width=True)
