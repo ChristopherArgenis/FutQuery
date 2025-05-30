@@ -217,12 +217,15 @@ with tab3:
 
     #### 8. Conclusión del Proyecto
     Durante el desarrollo de este proyecto, se consolidaron múltiples aprendizajes adquiridos en clase, incluyendo la normalización de datos, la creación de relaciones entre tablas y la escritura de consultas SQL complejas. 
+    
     A nivel técnico, uno de los principales desafíos fue decidir cómo poblar correctamente las tablas normalizadas y cómo estructurar las relaciones entre ellas para que reflejaran adecuadamente la lógica del dominio.
 
     Uno de los mayores logros fue convertir este análisis en una aplicación web interactiva con Streamlit, que no solo sirve como repositorio de ejemplos sino también como un entorno para ejecutar consultas SQL personalizadas. 
+    
     El ejecutor SQL representa un valor añadido, permitiendo al usuario practicar libremente en una base de datos bien estructurada.
 
     Esta herramienta tiene un gran potencial práctico, especialmente como apoyo educativo para estudiantes y fanáticos del fútbol que deseen practicar SQL sobre un contexto familiar y atractivo. 
+    
     Finalmente, una mejora futura destacable sería incorporar un asistente con inteligencia artificial que interprete lenguaje natural y lo convierta automáticamente en sentencias SQL, haciendo la experiencia aún más accesible e innovadora.
     """)
 
