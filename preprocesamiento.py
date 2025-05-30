@@ -24,3 +24,5 @@ club = players[["club_name", "club_logo_url"]]
 Finanzas = players[["value_eur", "wage_eur"]]
 metricas = players[["overall", "potential", "pace", "shooting", "passing", "dribbling", "defending", "physic"]]
 habilidades = players[["skill_dribbling", "skill_curve", "skill_ball_control", "movement_agility", "movement_reactions", "power_shot_power", "power_jumping"]]
+
+print(players.isnull().sum())
