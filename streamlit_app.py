@@ -2,14 +2,13 @@ import streamlit as st
 import sqlite3
 import pandas as pd
 
-# Conexion a la base de datos
+# Conexión a la base de datos
 conn = sqlite3.connect("fifa2015.db")
 cursor = conn.cursor()
 
 # Configuración de la app
 st.set_page_config(page_title="FutQuery", layout="wide")
 
-# Título y descripción
 st.title("⚽ FutQuery")
 st.markdown("""
 **FutQuery** es una herramienta interactiva para explorar y consultar datos FIFA usando SQL.
@@ -28,62 +27,131 @@ with tab1:
     ejemplos = [
         {
             "titulo": "Jugadores y sus nacionalidades",
-            "sql": "SELECT alias, pais FROM Jugador INNER JOIN Pais ON Jugador.pais_id = Pais.id LIMIT 10;",
-            "descripcion": "Consulta para ver los nombres de los jugadores y el país al que pertenecen. Útil para conocer la diversidad de nacionalidades."
+            "sql": """
+                SELECT Jugador.alias, Pais.Nombre
+                FROM Jugador
+                JOIN J_Info ON Jugador.id = J_Info.id
+                JOIN Pais ON J_Info.id_pais = Pais.id
+                LIMIT 10;
+            """,
+            "descripcion": "Muestra los jugadores y el país al que pertenecen."
         },
         {
             "titulo": "Top 5 jugadores con mayor valoración general",
-            "sql": "SELECT alias, valoracion FROM Jugador INNER JOIN J_Indicador ON Jugador.id = J_Indicador.jugador_id ORDER BY overall DESC LIMIT 5;",
-            "descripcion": "Identifica a los jugadores mejor valorados según su media general."
+            "sql": """
+                SELECT Jugador.alias, Metricas.General
+                FROM Jugador
+                JOIN J_Indicador ON Jugador.id = J_Indicador.id
+                JOIN Metricas ON J_Indicador.id_metricas = Metricas.id
+                ORDER BY Metricas.General DESC
+                LIMIT 5;
+            """,
+            "descripcion": "Jugadores con la mejor media general."
         },
         {
             "titulo": "Club con más jugadores",
-            "sql": "SELECT club, COUNT(*) AS cantidad FROM Club INNER JOIN J_Info ON Club.id = J_Info.club_id GROUP BY club_name ORDER BY cantidad DESC LIMIT 1;",
-            "descripcion": "Nos permite saber qué club tiene más jugadores en la base de datos."
+            "sql": """
+                SELECT Club.Nombre, COUNT(*) as cantidad
+                FROM J_Info
+                JOIN Club ON J_Info.id_club = Club.id
+                GROUP BY Club.Nombre
+                ORDER BY cantidad DESC
+                LIMIT 1;
+            """,
+            "descripcion": "Club con más jugadores registrados en la base."
         },
         {
             "titulo": "Promedio de altura por nacionalidad",
-            "sql": "SELECT pais, AVG(height_cm) AS altura_promedio FROM Jugador INNER JOIN Pais ON Jugador.pais_id = Pais.id GROUP BY nationality_name ORDER BY altura_promedio DESC LIMIT 10;",
-            "descripcion": "Analiza el promedio de estatura por país."
+            "sql": """
+                SELECT Pais.Nombre, AVG(Jugador.Altura) as altura_promedio
+                FROM Jugador
+                JOIN J_Info ON Jugador.id = J_Info.id
+                JOIN Pais ON J_Info.id_pais = Pais.id
+                GROUP BY Pais.Nombre
+                ORDER BY altura_promedio DESC
+                LIMIT 10;
+            """,
+            "descripcion": "Altura promedio de jugadores por país."
         },
         {
             "titulo": "Jugadores zurdos con mayor pase",
-            "sql": "SELECT alias, pase FROM Jugador INNER JOIN J_Indicador ON Jugador.id = J_Indicador.jugador_id WHERE preferred_foot = 'Left' ORDER BY passing DESC LIMIT 10;",
-            "descripcion": "Explora jugadores zurdos con mejores capacidades de pase."
+            "sql": """
+                SELECT Jugador.alias, Metricas.Pase
+                FROM Jugador
+                JOIN J_Indicador ON Jugador.id = J_Indicador.id
+                JOIN Metricas ON J_Indicador.id_metricas = Metricas.id
+                WHERE Jugador.Pie_preferente = 'Izquierdo'
+                ORDER BY Metricas.Pase DESC
+                LIMIT 10;
+            """,
+            "descripcion": "Jugadores zurdos con mayor habilidad de pase."
         },
         {
             "titulo": "Jugadores con mejor agilidad",
-            "sql": "SELECT alias, agilidad FROM Jugador INNER JOIN J_Indicador ON Jugador.id = J_Indicador.jugador_id ORDER BY movement_agility DESC LIMIT 10;",
-            "descripcion": "Muestra los jugadores más ágiles según su estadística de agilidad."
+            "sql": """
+                SELECT Jugador.alias, Habilidades.Agilidad
+                FROM Jugador
+                JOIN J_Indicador ON Jugador.id = J_Indicador.id
+                JOIN Habilidades ON J_Indicador.id_habilidades = Habilidades.id
+                ORDER BY Habilidades.Agilidad DESC
+                LIMIT 10;
+            """,
+            "descripcion": "Muestra los jugadores más ágiles."
         },
         {
             "titulo": "Valor promedio de mercado por club",
-            "sql": "SELECT club, AVG(valuacion) AS valor_promedio FROM Club INNER JOIN J_Info ON Club.id = J_Info.club_id INNER JOIN Finanzas ON Finanzas.id = J_Info.finanzas_id GROUP BY club_name ORDER BY valor_promedio DESC LIMIT 10;",
-            "descripcion": "Compara el valor promedio de los jugadores en los clubes."
+            "sql": """
+                SELECT Club.Nombre, AVG(Finanzas.Valuacion) as valor_promedio
+                FROM J_Info
+                JOIN Club ON J_Info.id_club = Club.id
+                JOIN Finanzas ON J_Info.id_finanzas = Finanzas.id
+                GROUP BY Club.Nombre
+                ORDER BY valor_promedio DESC
+                LIMIT 10;
+            """,
+            "descripcion": "Compara el valor promedio de mercado por club."
         },
         {
-            "titulo": "Distribución de jugadores por pie preferido",
-            "sql": "SELECT pie_preferido, COUNT(*) AS cantidad FROM Jugador GROUP BY pie_preferido;",
-            "descripcion": "Conoce cuántos jugadores son diestros o zurdos."
+            "titulo": "Distribución por pie preferente",
+            "sql": """
+                SELECT Pie_preferente, COUNT(*) as cantidad
+                FROM Jugador
+                GROUP BY Pie_preferente;
+            """,
+            "descripcion": "Distribución entre diestros y zurdos."
         },
         {
             "titulo": "Relación entre potencial y edad",
-            "sql": "SELECT edad, AVG(potencial) AS potencial_promedio FROM Jugador INNER JOIN J_Indicador ON Jugador.id = J_Indicador.jugador_id GROUP BY age ORDER BY edad;",
-            "descripcion": "Evalúa cómo varía el potencial según la edad."
+            "sql": """
+                SELECT Jugador.Edad, AVG(Metricas.Potencial) as potencial_promedio
+                FROM Jugador
+                JOIN J_Indicador ON Jugador.id = J_Indicador.id
+                JOIN Metricas ON J_Indicador.id_metricas = Metricas.id
+                GROUP BY Jugador.Edad
+                ORDER BY Jugador.Edad;
+            """,
+            "descripcion": "Cómo varía el potencial con la edad."
         },
         {
             "titulo": "Jugadores con más control de balón",
-            "sql": "SELECT alias, control_balon FROM Jugador INNER JOIN J_Indicador ON Jugador.id = J_Indicador.jugador_id ORDER BY skill_ball_control DESC LIMIT 10;",
-            "descripcion": "Muestra los jugadores con mayor control del balón."
-        }
+            "sql": """
+                SELECT Jugador.alias, Habilidades.'Control de Balon'
+                FROM Jugador
+                JOIN J_Indicador ON Jugador.id = J_Indicador.id
+                JOIN Habilidades ON J_Indicador.id_habilidades = Habilidades.id
+                ORDER BY Habilidades.'Control de Balon' DESC
+                LIMIT 10;
+            """,
+            "descripcion": "Jugadores con mejor control de balón."
+        },
     ]
 
     for ejemplo in ejemplos:
         with st.expander(ejemplo["titulo"]):
             st.markdown(f"**Descripción:** {ejemplo['descripcion']}")
-            st.code(ejemplo['sql'], language="sql")
+            st.code(ejemplo["sql"], language="sql")
             try:
-                resultado = pd.read_sql_query(ejemplo['sql'], conn)
+                resultado = pd.read_sql_query(ejemplo["sql"], conn)
                 st.dataframe(resultado)
             except Exception as e:
                 st.error(f"Error al ejecutar la consulta: {e}")
