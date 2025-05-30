@@ -212,8 +212,7 @@ with tab3:
       - Ejecutador personalizado de queries SQL.
 
     #### 7. Información del Estudiante
-    - **Nombre**: Christopher Argenis Preciado Silva  
-    - **Edad**: 20 años  
+    - **Nombre**: Christopher Argenis Preciado Silva
     - **Matrícula**: 376907
 
     #### 8. Conclusión del Proyecto
